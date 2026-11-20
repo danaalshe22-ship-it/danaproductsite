@@ -905,7 +905,7 @@
             academic:
               "Academic marketing project (ENT4113). This is not the official L'Occitane website. Product information and images © L'Occitane en Provence, sourced from ae.loccitane.com.",
             privacy:
-              "Privacy: optional analytics load only if you opt in. Inquiry details (name, email and question) are used to respond; marketing messages are sent only after separate consent.",
+              "Privacy: optional analytics load only if you opt in. Inquiry details (name, email, optional phone and interest) are used to respond; marketing messages are sent only after separate consent.",
             whatsapp: "Questions? Chat on WhatsApp",
             instagram: "Follow the campaign on Instagram ↗",
             terms: "Terms apply",
@@ -978,7 +978,7 @@
             academic:
               "مشروع تسويق أكاديمي (ENT4113). هذا الموقع ليس الموقع الرسمي لل'أوكسيتان. معلومات المنتج والصور © ل'أوكسيتان إن بروفانس، من ae.loccitane.com.",
             privacy:
-              "الخصوصية: لا تُحمّل التحليلات الاختيارية إلا بعد موافقتك. تُستخدم بيانات الاستفسار (الاسم والبريد الإلكتروني والسؤال) للرد عليكِ؛ ولا تُرسل رسائل تسويقية إلا بعد موافقة منفصلة.",
+              "الخصوصية: لا تُحمّل التحليلات الاختيارية إلا بعد موافقتك. تُستخدم بيانات الاستفسار (الاسم والبريد الإلكتروني ورقم الهاتف الاختياري والاهتمام) للرد عليكِ؛ ولا تُرسل رسائل تسويقية إلا بعد موافقة منفصلة.",
             whatsapp: "لديكِ سؤال؟ تواصلي عبر واتساب",
             instagram: "تابعي الحملة على إنستغرام ↗",
             terms: "تطبق الشروط",
@@ -992,10 +992,11 @@
           skip: "Skip to content",
           name: "Name",
           email: "Email",
-          question: "Product question",
+          phone: "Phone (optional)",
+          interest: "Interest / product question",
           marketing: "I agree to receive marketing messages. (Optional)",
           privacyForm:
-            "Your details are used to respond. Marketing messages are sent only if you choose the separate optional consent.",
+            "Your name, email, interest and optional phone are used to respond. Marketing messages are sent only if you choose the separate optional consent.",
           send: "Send inquiry",
           sending: "Sending…",
           sent: "Thank you. Your inquiry was sent.",
@@ -1015,10 +1016,11 @@
           skip: "انتقلي إلى المحتوى",
           name: "الاسم",
           email: "البريد الإلكتروني",
-          question: "سؤالك عن المنتج",
+          phone: "رقم الهاتف (اختياري)",
+          interest: "اهتمامك / استفسارك عن المنتج",
           marketing: "أوافق على تلقي الرسائل التسويقية. (اختياري)",
           privacyForm:
-            "تُستخدم بياناتك للرد عليكِ. ولا تُرسل الرسائل التسويقية إلا بعد اختيار الموافقة المنفصلة والاختيارية.",
+            "يُستخدم الاسم والبريد الإلكتروني والاهتمام ورقم الهاتف الاختياري للرد عليكِ. ولا تُرسل الرسائل التسويقية إلا بعد اختيار الموافقة المنفصلة والاختيارية.",
           send: "إرسال الاستفسار",
           sending: "جارٍ الإرسال…",
           sent: "شكراً لكِ. تم إرسال استفسارك.",
@@ -1374,10 +1376,21 @@
               />
             </div>
             <div class="field">
-              <label for="question" data-label="question"></label
+              <label for="phone" data-label="phone"></label
+              ><input
+                id="phone"
+                name="phone"
+                type="tel"
+                autocomplete="tel"
+                maxlength="32"
+                pattern="[+() 0-9-]{0,32}"
+              />
+            </div>
+            <div class="field">
+              <label for="interest" data-label="interest"></label
               ><textarea
-                id="question"
-                name="question"
+                id="interest"
+                name="interest"
                 maxlength="1200"
                 required
               ></textarea>
@@ -1450,7 +1463,7 @@
         <p class="privacy" data-copy="privacy"></p>
       </div>
     </footer>
-    <!-- GA4 placeholder; analytics load only after explicit visit-level opt-in. -->
+    <!-- Google Analytics 4 loads only after explicit visit-level analytics opt-in. -->
     <aside class="notice" id="analytics-notice" hidden>
       <strong data-ui="consentTitle"></strong>
       <p class="small" data-ui="consentText"></p>
@@ -1626,6 +1639,7 @@
         }),
       );
       let consented = false;
+      const GA4_MEASUREMENT_ID = "G-B8HB6B5DHZ";
       function event(name, params = {}) {
         if (window.gtag) gtag("event", name, params);
       }
@@ -1647,21 +1661,18 @@
       document.querySelector("#analytics-yes").addEventListener("click", () => {
         consented = true;
         notice.hidden = true;
-        const id = "[GA4_ID]";
-        if (!id.includes("[")) {
-          let s = document.createElement("script");
-          s.async = true;
-          s.src =
-            "https://www.googletagmanager.com/gtag/js?id=" +
-            encodeURIComponent(id);
-          document.head.append(s);
-          window.dataLayer = window.dataLayer || [];
-          window.gtag = function () {
-            dataLayer.push(arguments);
-          };
-          gtag("js", new Date());
-          gtag("config", id);
-        }
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () {
+          window.dataLayer.push(arguments);
+        };
+        window.gtag("js", new Date());
+        window.gtag("config", GA4_MEASUREMENT_ID, { send_page_view: true });
+        const s = document.createElement("script");
+        s.async = true;
+        s.src =
+          "https://www.googletagmanager.com/gtag/js?id=" +
+          encodeURIComponent(GA4_MEASUREMENT_ID);
+        document.head.append(s);
       });
       document
         .querySelector("#analytics-no")
@@ -1683,7 +1694,8 @@
               body: JSON.stringify({
                 name: fd.get("name"),
                 email: fd.get("email"),
-                question: fd.get("question"),
+                phone: fd.get("phone"),
+                interest: fd.get("interest"),
                 marketingConsent: fd.get("marketingConsent") === "true",
                 website: fd.get("website"),
               }),
@@ -1788,7 +1800,7 @@
         .querySelectorAll("[data-lang]")
         .forEach((b) => b.addEventListener("click", syncAvailability));
       syncAvailability();
-      // Replace [CAMPAIGN_WHATSAPP_NUMBER] and [CAMPAIGN_HANDLE] in the closing-link setup; [GA4_ID] is set in the opt-in handler.
+      // Replace [CAMPAIGN_WHATSAPP_NUMBER] and [CAMPAIGN_HANDLE] in the closing-link setup.
       const rtlLayout = document.createElement("style");
       rtlLayout.textContent =
         "body[lang=ar] .hero-art,body[lang=ar] .ritual-image,body[lang=ar] .ritual-image img,body[lang=ar] .hero-bottle{transform:none!important}";
