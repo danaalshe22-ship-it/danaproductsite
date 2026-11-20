@@ -907,7 +907,8 @@
             privacy:
               "Privacy: optional analytics load only if you opt in. Inquiry details (name, email, optional phone and interest) are used to respond; marketing messages are sent only after separate consent.",
             whatsapp: "Questions? Chat on WhatsApp",
-            instagram: "Follow the campaign on Instagram ↗",
+            instagram: "Shop L'Occitane Amande on Instagram ↗",
+            tiktok: "Shop L'Occitane Amande on TikTok ↗",
             terms: "Terms apply",
             rangeCaption: "Almond range · products sold separately",
             nav: ["Details", "Ritual", "Ingredients", "Reviews", "Delivery"],
@@ -980,7 +981,8 @@
             privacy:
               "الخصوصية: لا تُحمّل التحليلات الاختيارية إلا بعد موافقتك. تُستخدم بيانات الاستفسار (الاسم والبريد الإلكتروني ورقم الهاتف الاختياري والاهتمام) للرد عليكِ؛ ولا تُرسل رسائل تسويقية إلا بعد موافقة منفصلة.",
             whatsapp: "لديكِ سؤال؟ تواصلي عبر واتساب",
-            instagram: "تابعي الحملة على إنستغرام ↗",
+            instagram: "تسوّقي من لوكسيتان أماند على إنستغرام ↗",
+            tiktok: "تسوّقي من لوكسيتان أماند على تيك توك ↗",
             terms: "تطبق الشروط",
             rangeCaption: "مجموعة اللوز · المنتجات تباع بشكل منفصل",
             nav: ["التفاصيل", "الطقس", "المكونات", "التقييمات", "التوصيل"],
@@ -1038,7 +1040,7 @@
         },
       };
       const COPY_KEYS =
-        "heroTitle heroText detailTitle detailLead card1 card2 card3 brandLine ritualTitle directions routine step1 step2 step3 separate ingredientTitle ingredientLead traceable inciTitle sensitivity giftTitle gift1 gift1p gift2 gift2p gift3 gift3p reviewTitle reviewCount reviewLink servicesTitle formTitle formText closingTitle closingCopy shop reviewSource asOf priceNote priceNow footer academic privacy whatsapp instagram terms rangeCaption".split(
+        "heroTitle heroText detailTitle detailLead card1 card2 card3 brandLine ritualTitle directions routine step1 step2 step3 separate ingredientTitle ingredientLead traceable inciTitle sensitivity giftTitle gift1 gift1p gift2 gift2p gift3 gift3p reviewTitle reviewCount reviewLink servicesTitle formTitle formText closingTitle closingCopy shop reviewSource asOf priceNote priceNow footer academic privacy whatsapp instagram tiktok terms rangeCaption".split(
           " ",
         );
       let lang =
@@ -1445,8 +1447,15 @@
               class="link instagram"
               target="_blank"
               rel="noopener noreferrer"
-              href="#"
+              href="https://www.instagram.com/loccitaneamande/"
               data-copy="instagram"
+            ></a>
+            <a
+              class="link tiktok"
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://www.tiktok.com/@loccitane_amande"
+              data-copy="tiktok"
             ></a>
           </div>
         </div>
@@ -1587,8 +1596,7 @@
         document
           .querySelectorAll(".store")
           .forEach((a) => (a.href = tracked(a.dataset.location)));
-        const wa = "[CAMPAIGN_WHATSAPP_NUMBER]",
-          ig = "[CAMPAIGN_HANDLE]";
+        const wa = "[CAMPAIGN_WHATSAPP_NUMBER]";
         document.querySelector(".whatsapp").href = wa.includes("[")
           ? "https://wa.me/"
           : "https://wa.me/" +
@@ -1599,9 +1607,6 @@
                 ? "مرحباً، لدي سؤال عن زيت اللوز Supple Skin Oil."
                 : "Hello, I have a question about Almond Supple Skin Oil.",
             );
-        document.querySelector(".instagram").href = ig.includes("[")
-          ? "https://www.instagram.com/"
-          : "https://www.instagram.com/" + ig.replace(/^@/, "") + "/";
         document
           .querySelector(".menu")
           .setAttribute(
@@ -1656,6 +1661,9 @@
       document
         .querySelector(".instagram")
         .addEventListener("click", () => event("instagram_click"));
+      document
+        .querySelector(".tiktok")
+        .addEventListener("click", () => event("tiktok_click"));
       let notice = document.querySelector("#analytics-notice");
       notice.hidden = false;
       document.querySelector("#analytics-yes").addEventListener("click", () => {
@@ -1800,7 +1808,7 @@
         .querySelectorAll("[data-lang]")
         .forEach((b) => b.addEventListener("click", syncAvailability));
       syncAvailability();
-      // Replace [CAMPAIGN_WHATSAPP_NUMBER] and [CAMPAIGN_HANDLE] in the closing-link setup.
+      // Replace [CAMPAIGN_WHATSAPP_NUMBER] in the closing-link setup.
       const rtlLayout = document.createElement("style");
       rtlLayout.textContent =
         "body[lang=ar] .hero-art,body[lang=ar] .ritual-image,body[lang=ar] .ritual-image img,body[lang=ar] .hero-bottle{transform:none!important}";

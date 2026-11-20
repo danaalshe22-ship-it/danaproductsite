@@ -12,7 +12,7 @@ In Pabbly Connect, capture a sample webhook request, then add a Google Sheets **
 
 - GA4 Measurement ID: `G-B8HB6B5DHZ` is configured directly in `index.html`. The `gtag.js` library loads only after the visitor opts in for that visit. The earlier GTM container ID is not loaded, avoiding duplicate page views and events.
 - `[CAMPAIGN_WHATSAPP_NUMBER]`: replace with the campaign's WhatsApp number in international digits only. Do not use L'Occitane's number.
-- `[CAMPAIGN_HANDLE]`: replace with the campaign Instagram handle, without `@`.
+- Instagram and TikTok links point to the L'Occitane Amande store profiles in the closing links.
 - `[AR_STORE_URL]`: optional Arabic UAE product URL. No Arabic route was verified; the page currently uses the English URL.
 - `PABBLY_WEBHOOK_URL`: configure as a secret in Vercel Preview and Production.
 
