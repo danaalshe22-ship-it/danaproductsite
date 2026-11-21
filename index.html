@@ -1651,9 +1651,14 @@
       document
         .querySelectorAll(".store")
         .forEach((a) =>
-          a.addEventListener("click", () =>
-            event("store_click", { button_location: a.dataset.location }),
-          ),
+          a.addEventListener("click", () => {
+            event("store_click", { button_location: a.dataset.location });
+            event("shop_click", {
+              button_name: a.textContent.trim(),
+              page_location: window.location.href,
+              destination_url: a.href,
+            });
+          }),
         );
       document
         .querySelector(".whatsapp")
@@ -1713,6 +1718,11 @@
           status.textContent = UI[lang].sent;
           event("inquiry_submit", {
             marketing_consent: fd.get("marketingConsent") === "true",
+          });
+          event("lead_submit", {
+            form_name: "customer_inquiry",
+            page_location: window.location.href,
+            submission_type: "inquiry",
           });
           form.reset();
         } catch {
