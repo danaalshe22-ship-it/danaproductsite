@@ -1075,6 +1075,7 @@
               <a
                 class="btn store"
                 data-location="hero_cta"
+                data-shop-cta
                 target="_blank"
                 rel="noopener noreferrer"
                 href="#"
@@ -1182,6 +1183,7 @@
                 <span class="stepnum">01 · EXFOLIATE</span>
                 <p>
                   <a
+                    data-shop-cta
                     target="_blank"
                     rel="noopener noreferrer"
                     href="https://ae.loccitane.com/en/almond-amande-polishing-paste/29EC200A26.html"
@@ -1193,6 +1195,7 @@
                 <span class="stepnum">02 · CLEANSE</span>
                 <p>
                   <a
+                    data-shop-cta
                     target="_blank"
                     rel="noopener noreferrer"
                     href="https://ae.loccitane.com/en/almond-amande-shower-oil/29HD500A26.html"
@@ -1206,6 +1209,7 @@
                   <a
                     class="store"
                     data-location="facts_link"
+                    data-shop-cta
                     target="_blank"
                     rel="noopener noreferrer"
                     href="#"
@@ -1429,6 +1433,7 @@
             <a
               class="link store"
               data-location="closing_cta"
+              data-shop-cta
               target="_blank"
               rel="noopener noreferrer"
               href="#"
@@ -1651,14 +1656,20 @@
       document
         .querySelectorAll(".store")
         .forEach((a) =>
-          a.addEventListener("click", () => {
-            event("store_click", { button_location: a.dataset.location });
+          a.addEventListener("click", () =>
+            event("store_click", { button_location: a.dataset.location }),
+          ),
+        );
+      document
+        .querySelectorAll("[data-shop-cta]")
+        .forEach((a) =>
+          a.addEventListener("click", () =>
             event("shop_click", {
               button_name: a.textContent.trim(),
               page_location: window.location.href,
               destination_url: a.href,
-            });
-          }),
+            }),
+          ),
         );
       document
         .querySelector(".whatsapp")
@@ -1932,9 +1943,15 @@
       document
         .querySelectorAll("[data-lang]")
         .forEach((b) => b.addEventListener("click", refreshPrice));
-      priceNode.addEventListener("click", () =>
-        window.open(tracked("facts_link"), "_blank", "noopener,noreferrer"),
-      );
+      priceNode.addEventListener("click", () => {
+        const destinationUrl = tracked("facts_link");
+        event("shop_click", {
+          button_name: "Product price link",
+          page_location: window.location.href,
+          destination_url: destinationUrl,
+        });
+        window.open(destinationUrl, "_blank", "noopener,noreferrer");
+      });
       priceNode.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
