@@ -1703,11 +1703,13 @@
         .addEventListener("click", () => (notice.hidden = true));
       const form = document.querySelector("#inquiry-form"),
         status = document.querySelector("#form-status");
+      let submitting = false;
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
-        if (!form.reportValidity()) return;
+        if (submitting || !form.reportValidity()) return;
         let fd = new FormData(form),
           button = form.querySelector("[type=submit]");
+        submitting = true;
         button.disabled = true;
         button.textContent = UI[lang].sending;
         status.textContent = "";
@@ -1725,20 +1727,21 @@
               }),
             }),
             body = await r.json().catch(() => ({}));
-          if (!r.ok) throw Error(body.message || "error");
+          if (!r.ok || body.ok !== true)
+            throw Error(body.message || "error");
           status.textContent = UI[lang].sent;
-          event("inquiry_submit", {
-            marketing_consent: fd.get("marketingConsent") === "true",
-          });
-          event("lead_submit", {
-            form_name: "customer_inquiry",
-            page_location: window.location.href,
-            submission_type: "inquiry",
-          });
+          if (!String(fd.get("website") || "").trim())
+            event("lead_submit", {
+              form_name: "customer_inquiry",
+              page_location: window.location.href,
+              submission_type: "inquiry",
+              marketing_consent: fd.get("marketingConsent") === "true",
+            });
           form.reset();
         } catch {
           status.textContent = UI[lang].error;
         } finally {
+          submitting = false;
           button.disabled = false;
           button.textContent = UI[lang].send;
         }
